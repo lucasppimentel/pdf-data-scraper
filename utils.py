@@ -60,7 +60,7 @@ def mostrar_pagina(arquivo, numero_pagina):
 def apresentar_arquivos():
     # Lista todos os pdfs na pasta
     files = list()
-    lista = listdir()
+    lista = listdir("Examples")
     for file in lista:
         if '.pdf' in file:
             files.append(file)

@@ -112,7 +112,7 @@ class Ui_MainWindow(object):
     def selectFile(self):
         self.has_file = True
 
-        self.arquivo = self.CB_file.currentText()
+        self.arquivo = f"Examples/{self.CB_file.currentText()}"
         self.images = convert_from_path(self.arquivo, poppler_path=self.poppler, fmt="ppm", size=(450, None))
         self.page_pixmap = QtGui.QPixmap()
         self.loadppm(self.images[self.page], self.page_pixmap)
