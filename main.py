@@ -103,10 +103,6 @@ class Ui_MainWindow(object):
             self.label.setPixmap(self.page_pixmap)
     
     def selectPage(self):
-        #global a
-        #global coords
-        #a = 0
-        #coords = 0
         utils.mostrar_pagina(self.arquivo, self.page)
     
     def selectFile(self):
