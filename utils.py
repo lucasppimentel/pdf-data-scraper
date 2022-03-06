@@ -5,6 +5,11 @@ from os import listdir
 from matplotlib.widgets import RectangleSelector
 from camelot import read_pdf
 from numpy import abs
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from pandas import read_excel
+from datetime import date
+from os import path
 
 
 def mostrar_pagina(arquivo, numero_pagina):
@@ -36,7 +41,8 @@ def mostrar_pagina(arquivo, numero_pagina):
         df = table[0].df
         print(df)
         print("Tabela enviada para Excel")
-        df.to_excel("Teste.xlsx")
+        #df.to_excel("Teste.xlsx")
+        write_excel(df, arquivo)
 
     # Poppler e foto da página
     poppler = "C:/Program Files/poppler-22.01.0/Library/bin"
@@ -84,3 +90,36 @@ def apresentar_arquivos():
             pass
 
     return files
+
+
+
+def write_excel(df, arquivo):
+    today = date.today()
+    dest_filename = f'Sheets/{today.day}-{today.month}-{today.year}.xlsx'
+    excel_exists = path.exists(dest_filename)
+    sheet_name = arquivo.split('/')[-1]
+
+    if excel_exists:
+        wb = load_workbook(filename=dest_filename)
+
+        if sheet_name in wb.sheetnames:
+            sheet_data = read_excel(dest_filename, sheet_name=sheet_name)
+            lines_used = len(sheet_data) + 5
+            ws = wb[sheet_name]
+        else:
+            lines_used = 0
+            ws = wb.create_sheet(sheet_name)
+    
+    else:
+        wb = Workbook()
+        lines_used = 0
+        ws = wb.create_sheet(sheet_name)
+
+
+    rows = dataframe_to_rows(df)
+    for r_idx, row in enumerate(rows, 1):
+        for c_idx, value in enumerate(row, 1):
+            ws.cell(row=r_idx+lines_used, column=c_idx, value=value)
+
+
+    wb.save(filename = dest_filename)
